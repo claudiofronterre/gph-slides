@@ -1,0 +1,55 @@
+<section id="$idprefix$title-slide"$for(title-slide-attributes/pairs)$ $it.key$="$it.value$"$endfor$ class="quarto-title-block gph-title-slide">
+  <div class="gph-motif" aria-hidden="true"></div>
+  <div class="gph-title-top">
+    <div class="gph-wordmark">
+      <span class="gph-wordmark-short">$if(group-short)$$group-short$$else$GPH$endif$</span>
+      <span class="gph-wordmark-long">$if(group-name)$$group-name$$else$Geostatistics for<br>Population Health$endif$</span>
+    </div>
+$if(title-logos)$
+    <div class="gph-title-logos">
+$for(title-logos)$
+      <img src="$it.src$" alt="$it.alt$"$if(it.height)$ style="height:$it.height$"$endif$>
+$endfor$
+    </div>
+$endif$
+  </div>
+  <div class="gph-title-main">
+    <h1 class="title">$title$</h1>
+$if(subtitle)$
+    <p class="subtitle">$subtitle$</p>
+$endif$
+  </div>
+  <div class="gph-title-meta">
+    <div class="gph-title-authors">
+$for(by-author)$
+      <div class="gph-title-author">
+        <p class="gph-author-name">$if(by-author.url)$<a href="$by-author.url$">$endif$$by-author.name.literal$$if(by-author.url)$</a>$endif$</p>
+$if(by-author.metadata.position)$
+        <p class="gph-author-detail">$by-author.metadata.position$</p>
+$endif$
+$for(by-author.affiliations)$
+        <p class="gph-author-detail">$if(it.department)$$it.department$<br>$endif$$it.name$</p>
+$endfor$
+$if(by-author.email)$
+        <p class="gph-author-detail gph-author-email"><a href="mailto:$by-author.email$">$by-author.email$</a></p>
+$endif$
+      </div>
+$endfor$
+    </div>
+$if(event)$
+    <div class="gph-title-event">
+      <p class="gph-event-name">$event$</p>
+$if(date)$
+      <p class="gph-event-date">$date$</p>
+$endif$
+$if(location)$
+      <p class="gph-event-date">$location$</p>
+$endif$
+    </div>
+$elseif(date)$
+    <div class="gph-title-event">
+      <p class="gph-event-date">$date$</p>
+    </div>
+$endif$
+  </div>
+</section>

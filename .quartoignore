@@ -1,0 +1,4 @@
+# Files that `quarto use template` should not copy into a new talk
+tools
+template.html
+template_files

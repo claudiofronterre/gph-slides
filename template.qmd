@@ -1,0 +1,768 @@
+---
+title: "Mapping disease risk with model-based geostatistics"
+subtitle: "An example deck for the GPH slide template"
+author:
+  - name: Claudio Fronterre
+    position: Senior Research Fellow in Statistical Science
+    email: c.fronterre@bham.ac.uk
+    affiliations:
+      - name: University of Birmingham
+        department: Department of Applied Health Sciences
+event: "GPH group meeting"
+location: "Birmingham, UK"
+date: today
+title-logos:
+  - src: assets/uob-logo.svg
+    alt: University of Birmingham
+format:
+  gph-revealjs:
+    logo: assets/uob-logo.svg
+    footer: "Geostatistics for Population Health"
+    section-label: true   # section name in the top right corner of each slide
+    embed-resources: true
+bibliography: references.bib
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+```{r}
+#| label: setup
+#| include: false
+
+# Theme, palettes and fonts that match the slides
+source("R/gph-theme.R")
+theme_set(theme_gph())
+
+# Simulated data used by the example figures. Nothing here is real.
+set.seed(42)
+
+# A Gaussian process with Matérn correlation, drawn on a grid with random
+# Fourier features (smoothness nu = 1.5, scale phi = 0.18)
+nu <- 1.5
+phi <- 0.18
+m <- 2000
+omega <- matrix(rnorm(2 * m), ncol = 2) / (phi * sqrt(rchisq(m, df = 2 * nu)))
+shift <- runif(m, 0, 2 * pi)
+gp_at <- function(xy) {
+  sqrt(2 / m) * rowSums(cos(xy %*% t(omega) + rep(shift, each = nrow(xy))))
+}
+
+grid <- expand.grid(x = seq(0, 1, length.out = 120), y = seq(0, 1, length.out = 120))
+grid$prevalence <- plogis(-1.4 + 0.9 * gp_at(as.matrix(grid)))
+
+n_sites <- 120
+sites <- data.frame(x = runif(n_sites), y = runif(n_sites))
+sites$tested <- sample(60:180, n_sites, replace = TRUE)
+sites$positive <- rbinom(n_sites, sites$tested,
+                         plogis(-1.4 + 0.9 * gp_at(as.matrix(sites[, c("x", "y")]))))
+sites$observed <- sites$positive / sites$tested
+
+# A stand-in for the predictive standard deviation, growing with the
+# distance to the nearest survey, and the probability that prevalence
+# exceeds 20%
+dist <- sqrt(outer(grid$x, sites$x, "-")^2 + outer(grid$y, sites$y, "-")^2)
+grid$sd <- 0.015 + 0.07 * (1 - exp(-apply(dist, 1, min) / 0.08))
+grid$exceed <- pnorm((grid$prevalence - 0.2) / grid$sd)
+
+# Monthly proportion of positive collections in three zones
+months <- factor(month.abb, levels = month.abb)
+seasonal <- function(peak, base, amp) {
+  plogis(base + amp * cos(2 * pi * (seq_len(12) - peak) / 12) + rnorm(12, 0, 0.12))
+}
+zones <- data.frame(
+  month = rep(months, 3),
+  zone = factor(rep(c("Forest", "Mosaic", "Savanna"), each = 12),
+                levels = c("Forest", "Mosaic", "Savanna")),
+  positive = c(seasonal(8, -0.4, 0.9), seasonal(9, -1.2, 0.6), seasonal(9, -2.4, 0.5))
+)
+```
+
+## What this template gives you
+
+<!--
+A level-2 heading (##) starts a new slide. Write plain Markdown below it.
+Bullets get gold markers. Keep to a few short points per slide.
+Comments like this one belong inside a slide: one placed before the first
+heading would make an empty slide of its own.
+-->
+
+- A title slide built from the YAML header, with the GPH wordmark and your logos
+- Numbered section slides, statements and a closing slide, in light or dark
+- Layouts for columns, key numbers, steps, cards, equations and code
+- Outlines, full-bleed pictures, papers, people and QR codes
+- A ggplot2 theme and colour scales that match the slides
+- One self-contained HTML file that can also be printed to PDF
+
+::: {.takeaway}
+Write the content in Markdown. The extension takes care of the design.
+:::
+
+::: {.notes}
+Speaker notes go in a notes block like this one. Press S during the talk to
+open the speaker view with notes, a timer and the next slide.
+:::
+
+<!--
+{.outline} fills the slide with the numbered sections and their
+descriptions. Repeat it before a later section and that section is
+highlighted.
+-->
+
+## Outline {.outline}
+
+<!--
+A level-1 heading (#) makes a section slide. Sections are numbered
+automatically. Use {.unnumbered} to drop the number, or set
+`section-numbers: false` in the YAML header to drop all of them.
+Text under the heading appears as a short description.
+-->
+
+# Writing slides
+
+Text, emphasis, columns and statements
+
+## Lead text and a key message
+
+::: {.lead}
+Start a slide with one sentence that says what the audience should take from it.
+:::
+
+Body text is set at 28 pixels so that it can be read from the back of a lecture theatre. Use **bold** for key terms, [a gold marker]{.mark} for the one phrase that matters most, and [links](https://quarto.org/docs/presentations/revealjs/) where the audience may want to read more.
+
+::: {.takeaway}
+A takeaway block closes the slide with the message to remember.
+:::
+
+<!--
+Marks are spans: put the words in square brackets and the class in braces.
+Add .fragment to any of them and the mark is drawn on the next click while
+the words stay in place.
+-->
+
+## Ways to mark a word
+
+[A gold marker]{.mark} for the phrase that matters most
+
+[A gold underline]{.underline} for a term you are about to define
+
+A ring around one number, such as [95%]{.circle}
+
+[White on black]{.invert} for a label or a warning
+
+The ~~range~~ scale parameter, for a word you are correcting
+
+*Serif italics* for gentle emphasis
+
+::: {.caption}
+Write `[words]{.mark}`, `.underline`, `.circle` or `.invert`, `~~words~~` and `*words*`. Add `.fragment` to draw the mark on the next click, [like this]{.mark .fragment}.
+:::
+
+## Two columns
+
+:::: {.columns .v-center}
+::: {.column width="40%"}
+### Text and a figure
+
+Columns take any width. Add `.v-center` to align their middles and `.divided` for a separating line.
+
+Prevalence is higher where nearby surveys also found many positives.
+
+::: {.caption}
+Simulated survey of `r n_sites` villages.
+:::
+:::
+
+::: {.column width="60%"}
+```{r}
+#| label: map-small
+#| fig-width: 7
+#| fig-height: 5.6
+ggplot(grid, aes(x, y)) +
+  geom_raster(aes(fill = prevalence)) +
+  geom_point(data = sites, aes(size = tested), shape = 21,
+             fill = gph_paper, colour = gph_ink, stroke = 0.6) +
+  scale_fill_gph_c(name = "Prevalence", labels = scales::label_percent()) +
+  scale_size_area(max_size = 3.2, guide = "none") +
+  coord_equal(expand = FALSE) +
+  theme_gph_map()
+```
+:::
+::::
+
+<!-- {.statement} turns the title into a large message in the middle of the slide. -->
+
+## Nearby surveys tell us about places we have not visited {.statement}
+
+Spatial correlation is what lets a geostatistical model borrow strength across locations.
+
+## Key numbers
+
+::: {.stats}
+**`r n_sites`** villages surveyed
+
+**`r format(sum(sites$tested), big.mark = ",")`** people tested
+
+**`r scales::percent(mean(sites$observed), accuracy = 1)`** average observed prevalence
+:::
+
+Each paragraph inside `.stats` becomes one figure. The first bold text is set large. Use `.stats .large` for a single headline number.
+
+::: {.caption}
+Values are computed in R from the simulated data when the slides are rendered.
+:::
+
+## A process in steps
+
+::: {.steps}
+1. **Explore the data**
+   Look at the empirical variogram and the spatial pattern of residuals.
+2. **Fit the model**
+   Estimate covariate effects and the parameters of the spatial correlation.
+3. **Check the predictions**
+   Use cross-validation to compare predicted and observed prevalence.
+4. **Report with uncertainty**
+   Map predictive means alongside exceedance probabilities.
+:::
+
+## Three ideas side by side
+
+::: {.cards}
+::: {.card .accent}
+### Methods
+
+New models for spatial and spatio-temporal health data, with honest uncertainty.
+:::
+
+::: {.card}
+### Software
+
+Open R packages, such as RiskMap, that make the methods usable by others.
+:::
+
+::: {.card}
+### Applications
+
+Work with health programmes on decisions about surveillance and control.
+:::
+:::
+
+Add `.accent` to one card to give it a gold rule.
+
+# Figures and data
+
+Plots, maps, tables and colour keys
+
+<!--
+A single figure under a title stretches to fill the slide. Plots use
+theme_gph() from R/gph-theme.R, so fonts and colours match.
+-->
+
+## The empirical variogram
+
+```{r}
+#| label: variogram
+#| fig-width: 11
+#| fig-height: 4.9
+# Simulate an exponential Gaussian process with a nugget at random locations
+set.seed(7)
+n_vario <- 400
+pts <- matrix(runif(2 * n_vario), ncol = 2)
+d <- as.matrix(dist(pts))
+z <- drop(t(chol(exp(-d / 0.1) + diag(0.1, n_vario))) %*% rnorm(n_vario))
+
+# Binned empirical semivariogram
+pairs <- which(upper.tri(d), arr.ind = TRUE)
+u <- d[pairs]
+g <- 0.5 * (z[pairs[, 1]] - z[pairs[, 2]])^2
+bins <- cut(u, breaks = seq(0, 0.6, by = 0.03))
+vario <- data.frame(
+  u = tapply(u, bins, mean),
+  gamma = tapply(g, bins, mean),
+  pairs = as.vector(table(bins))
+)
+
+# Exponential variogram fitted by weighted least squares (log parameters)
+exp_vario <- function(h, tau2, sigma2, phi) tau2 + sigma2 * (1 - exp(-h / phi))
+wls <- function(p) {
+  sum(vario$pairs * (vario$gamma - exp_vario(vario$u, exp(p[1]), exp(p[2]), exp(p[3])))^2)
+}
+est <- setNames(exp(optim(log(c(0.1, 1, 0.1)), wls)$par), c("tau2", "sigma2", "phi"))
+curve <- data.frame(u = seq(0, 0.6, length.out = 200))
+curve$gamma <- exp_vario(curve$u, est[["tau2"]], est[["sigma2"]], est[["phi"]])
+practical_range <- log(20) * est[["phi"]]
+
+ggplot(vario, aes(u, gamma)) +
+  geom_vline(xintercept = practical_range, colour = gph_grey,
+             linewidth = 0.5, linetype = "22") +
+  geom_line(data = curve, colour = gph_colours[["blue"]], linewidth = 1.1) +
+  geom_point(colour = gph_ink, size = 3) +
+  annotate("text", x = practical_range + 0.01, y = 0.15, hjust = 0,
+           label = "Practical range", family = gph_font,
+           colour = gph_grey, size = 5.6) +
+  scale_x_continuous("Distance between locations", limits = c(0, 0.6),
+                     expand = expansion(mult = c(0, 0.02))) +
+  scale_y_continuous("Semivariance", limits = c(0, NA),
+                     expand = expansion(mult = c(0, 0.05)))
+```
+
+::: {.caption}
+Simulated data at `r n_vario` locations. Points are binned empirical semivariances. The line is an exponential variogram fitted by weighted least squares, with estimated scale parameter `r round(est[["phi"]], 3)` and practical range `r round(practical_range, 2)`.
+:::
+
+## A map beside its message
+
+:::: {.columns .v-center}
+::: {.column width="58%"}
+```{r}
+#| label: map
+#| fig-width: 7
+#| fig-height: 5.6
+ggplot(grid, aes(x, y)) +
+  geom_raster(aes(fill = prevalence)) +
+  geom_point(data = sites, shape = 21, size = 2.2, stroke = 0.5,
+             fill = gph_paper, colour = gph_ink) +
+  scale_fill_gph_c(name = "Prevalence", labels = scales::label_percent()) +
+  coord_equal(expand = FALSE) +
+  theme_gph_map()
+```
+:::
+
+::: {.column width="42%"}
+### Sequential colour for magnitude
+
+`scale_fill_gph_c()` uses tints of the brand blue, from light for low values to deep for high values.
+
+For signed quantities such as residuals, use `type = "diverging"`.
+
+::: {.caption}
+Simulated prevalence surface with survey locations.
+:::
+:::
+::::
+
+<!--
+Give each quantity its own hue with scale_fill_gph_c(hue = "purple"), and
+show exceedance probabilities in classes with scale_fill_gph_exceedance().
+theme_gph_map(legend = "bottom") puts the colour bar under each map.
+-->
+
+## Three maps from one model
+
+:::: {.columns}
+::: {.column width="33%"}
+```{r}
+#| label: map-mean
+#| fig-width: 4.6
+#| fig-height: 5.6
+ggplot(grid, aes(x, y, fill = prevalence)) +
+  geom_raster() +
+  scale_fill_gph_c(name = "Predicted prevalence", labels = scales::label_percent()) +
+  coord_equal(expand = FALSE) +
+  theme_gph_map(legend = "bottom")
+```
+:::
+
+::: {.column width="33%"}
+```{r}
+#| label: map-sd
+#| fig-width: 4.6
+#| fig-height: 5.6
+ggplot(grid, aes(x, y, fill = sd)) +
+  geom_raster() +
+  scale_fill_gph_c(name = "Standard deviation", hue = "purple",
+                   labels = scales::label_percent()) +
+  coord_equal(expand = FALSE) +
+  theme_gph_map(legend = "bottom")
+```
+:::
+
+::: {.column width="33%"}
+```{r}
+#| label: map-exceed
+#| fig-width: 4.6
+#| fig-height: 5.6
+ggplot(grid, aes(x, y, fill = exceed)) +
+  geom_raster() +
+  scale_fill_gph_exceedance(name = "Probability above 20%") +
+  coord_equal(expand = FALSE) +
+  theme_gph_map(legend = "bottom")
+```
+:::
+::::
+
+## Colour keys in the text
+
+```{r}
+#| label: zones
+#| fig-width: 11
+#| fig-height: 4
+# Direct labels at the end of each line, pushed apart when they are close
+last <- zones[zones$month == "Dec", ]
+last <- last[order(last$positive), ]
+last$label_y <- last$positive
+for (i in 2:nrow(last)) {
+  last$label_y[i] <- max(last$label_y[i], last$label_y[i - 1] + 0.06)
+}
+
+ggplot(zones, aes(month, positive, colour = zone, group = zone)) +
+  geom_line(linewidth = 1.1) +
+  geom_point(size = 2.6) +
+  geom_text(data = last, aes(y = label_y, label = zone), hjust = 0, nudge_x = 0.25,
+            family = gph_font, size = 6, show.legend = FALSE) +
+  scale_colour_gph(guide = "none") +
+  scale_x_discrete(expand = expansion(add = c(0.4, 1.6))) +
+  scale_y_continuous("Positive collections", labels = scales::label_percent(),
+                     limits = c(0, NA)) +
+  labs(x = NULL)
+```
+
+Write [Forest]{.key .turquoise}, [Mosaic]{.key .orange} and [Savanna]{.key .purple} to link the text to the figure without coloured text, or tint a marker as in [Forest]{.mark .turquoise}. Add `.line` or `.dot` to change the key's shape.
+
+<!--
+scale_colour_gph_highlight("Forest") draws the named groups in the
+categorical colours and every other group in light grey. Groups are drawn
+in the order of their levels, so the highlighted one goes last.
+-->
+
+## One group in colour
+
+```{r}
+#| label: zones-highlight
+#| fig-width: 11
+#| fig-height: 4
+# Forest last, so that it is drawn on top of the grey lines
+zones_front <- transform(zones, zone = factor(zone, levels = c("Mosaic", "Savanna", "Forest")))
+
+ggplot(zones_front, aes(month, positive, colour = zone, group = zone)) +
+  geom_line(linewidth = 1.1) +
+  geom_point(size = 2.6) +
+  geom_text(data = last, aes(y = label_y, label = zone), hjust = 0, nudge_x = 0.25,
+            family = gph_font, size = 6, show.legend = FALSE) +
+  scale_colour_gph_highlight("Forest", guide = "none") +
+  scale_x_discrete(expand = expansion(add = c(0.4, 1.6))) +
+  scale_y_continuous("Positive collections", labels = scales::label_percent(),
+                     limits = c(0, NA)) +
+  labs(x = NULL)
+```
+
+Only in [Forest]{.key .turquoise} does positivity pass 40%. The other zones stay on the plot in grey, for context.
+
+## Tables
+
+| Question | Model output | Shown as |
+|:---------|:-------------|:---------|
+| Where is prevalence highest? | Predictive mean of prevalence | A map |
+| How sure are we? | Predictive standard deviation | A second map with its own scale |
+| Has a threshold been crossed? | Exceedance probability $P\{p(x) > c \mid y\}$ | A map on a fixed 0 to 1 scale |
+| What is happening across a district? | Areal average with a predictive interval | A number with its interval |
+
+Tables have clean rules and no shading. Keep them short and round the numbers.
+
+<!--
+{.photo} fills the slide with its background image and sets the title over
+a dark gradient. Use it for a fieldwork photo or a map. A paragraph after
+the title becomes a credit line.
+-->
+
+## Where prevalence is highest {.photo background-image="assets/examples/map.png"}
+
+Simulated data. Replace the image with your own photo or map.
+
+<!--
+{.papers} shows the top of the first page of each paper. Point it at an
+image or straight at a PDF, whose first page is saved as an image the first
+time the slides are rendered (with pdftoppm or the pdftools R package).
+Add .third or .full to change how much of the page shows.
+-->
+
+## Papers on a slide
+
+::: {.papers}
+![Journal of Example Statistics, 2026](assets/examples/paper-1.pdf)
+
+![Example Spatial Health, 2025](assets/examples/paper-2.pdf)
+
+![Example Reports in Public Health, 2024](assets/examples/paper-3.pdf)
+:::
+
+<!-- Add .stack to fan the pages out like a pile on a desk. -->
+
+## Three papers, one programme of work
+
+:::: {.columns .v-center}
+::: {.column width="42%"}
+Each study answered a question the previous one raised, from mapping prevalence to choosing where to survey next and deciding where to act.
+:::
+
+::: {.column width="58%"}
+::: {.papers .stack}
+![](assets/examples/paper-1.pdf)
+
+![](assets/examples/paper-2.pdf)
+
+![](assets/examples/paper-3.pdf)
+:::
+:::
+::::
+
+<!-- A repeated outline highlights the section that follows it. -->
+
+## Outline {.outline}
+
+<!--
+Add {.dark} to a section, statement or closing heading to set it white on
+black. Use it to make one part of the talk stand out, or on every section
+heading for a darker rhythm.
+-->
+
+# Models and code {.dark}
+
+Equations, R code, callouts and references
+
+## A model and what each term means
+
+::: {.equation}
+$$
+\log\left\{\frac{p(x_i)}{1 - p(x_i)}\right\} = d(x_i)^\top \beta + S(x_i) + Z_i
+$$
+:::
+
+::: {.terms}
+$Y_i \sim \text{Bin}\{n_i, p(x_i)\}$
+
+Number of positive tests among $n_i$ people sampled at location $x_i$
+
+$d(x_i)^\top \beta$
+
+Effects of covariates such as elevation or rainfall
+
+$S(x)$
+
+Zero-mean Gaussian process with variance $\sigma^2$ and correlation $\rho(u) = \exp(-u / \phi)$
+
+$\phi$
+
+Scale parameter of the spatial correlation. The practical range is $\log(20)\,\phi \approx 3\phi$
+
+$Z_i$
+
+Unstructured variation, independent $\text{N}(0, \tau^2)$
+:::
+
+## Code
+
+```{r}
+#| label: code-example
+#| echo: true
+#| eval: false
+#| code-line-numbers: "|1-3|5-11|13"
+library(RiskMap)
+
+data(loaloa)
+
+fit <- glgpm(
+  NO_INF ~ log(ELEVATION) + gp(),
+  data = loaloa,
+  family = "binomial",
+  denominator = NO_EXAM,
+  distance_units = "km"
+)
+
+summary(fit)
+```
+
+Set `echo: true` on a chunk to show its code. Add `code-line-numbers: "|1-3|5-11"` to step through the lines on each click.
+
+## Code with its output
+
+```{r}
+#| label: output-example
+#| echo: true
+summary(sites$observed)
+```
+
+Output is set in grey beside a thin rule, so that it reads as a result rather than as code to type.
+
+## Callouts
+
+:::: {.columns}
+::: {.column}
+::: {.callout-note}
+## About the data
+Survey locations are simulated and do not refer to real villages.
+:::
+:::
+
+::: {.column}
+::: {.callout-tip}
+## Practical range
+For the exponential correlation it is about three times the scale parameter.
+:::
+:::
+::::
+
+::: {.callout-warning}
+## Before sharing
+Check that every figure has a source line and that no personal data are shown.
+:::
+
+## Revealing points one at a time
+
+::: {.incremental}
+- Surveys are expensive, so we cannot visit every village
+- Prevalence varies smoothly in space
+- A model of that variation predicts where we have no data
+:::
+
+. . .
+
+::: {.takeaway}
+Use `.incremental` for lists and `. . .` to pause anywhere else.
+:::
+
+## A quotation
+
+> All models are wrong, but some are useful.
+>
+> [George E. P. Box, 1979]{.attribution}
+
+Quotations are set in the heading serif with a thin rule.
+
+## Citations
+
+Model-based geostatistics was introduced by @diggle1998. Book-length treatments are @diggle2007 and @diggle2019, and @giorgi2026 covers the methods in R.
+
+Cite with `@key` from `references.bib`. Quarto formats the list on the references slide.
+
+## A prevalence map without its uncertainty is only half an answer {.statement .dark}
+
+Show predictive standard deviations or exceedance probabilities beside every map of predicted prevalence.
+
+## Conclusions
+
+- **Spatial models** borrow strength from nearby surveys
+- **Uncertainty** belongs on the map, not in a footnote
+- **Open software** lets programmes use the methods
+
+::: {.takeaway}
+End the talk on the message you want people to repeat.
+:::
+
+## References
+
+::: {#refs}
+:::
+
+<!--
+{.people} turns a list into a grid of people. Start each item with a photo,
+as in ![](photos/name.jpg), then the name in bold and a short role. Without
+a photo the initials are shown.
+-->
+
+## People who shaped the field
+
+::: {.people}
+- **Florence Nightingale** Statistics for public health
+- **John Snow** Mapped cholera in London, 1854
+- **Danie Krige** Kriging is named after him
+- **Bertil Matérn** The Matérn correlation, 1960
+- **Georges Matheron** Founded geostatistics, 1962
+:::
+
+<!--
+{{< qr address >}} draws a QR code that works offline and in the PDF. On
+the closing slide it sits on the right. Quote the address if it contains
+an equals sign.
+-->
+
+## Thank you {.closing}
+
+**Claudio Fronterre**
+
+[c.fronterre@bham.ac.uk](mailto:c.fronterre@bham.ac.uk)
+
+[mbgr.org](https://mbgr.org)
+
+{{< qr https://github.com/claudiofronterre/gph-slides >}}
+
+<!--
+A level-1 heading with {.backup} (or {.appendix}) starts the backup
+slides. They are not counted, so the slide number shown on the closing
+slide is the length of the talk.
+-->
+
+# Backup {.backup}
+
+Slides for questions
+
+## Syntax at a glance
+
+:::: {.columns}
+::: {.column}
+```markdown
+## Slide title {.statement}
+
+::: {.lead}
+Opening sentence.
+:::
+
+::: {.takeaway}
+Key message.
+:::
+
+[phrase]{.mark}
+[term]{.underline .fragment}
+[Forest]{.key .turquoise}
+
+# Section {.dark}
+```
+:::
+
+::: {.column}
+```markdown
+::: {.stats}
+**676** trap locations
+
+**7,617** site-months
+:::
+
+::: {.steps}
+1. **Step** with a description
+:::
+
+::: {.cards}
+::: {.card}
+### Title
+Text
+:::
+:::
+```
+:::
+::::
+
+## Slide classes
+
+| Class | Use it on | Effect |
+|:--------|:---------------|:-------------------|
+| `.statement` | slide heading | One large message |
+| `.closing` | slide heading | Closing slide with the motif |
+| `.dark` | section, statement or closing slide | White on the brand black |
+| `.photo` | slide heading | Background image fills the slide |
+| `.outline` | slide heading | List of sections, filled in for you |
+| `.no-title` | slide heading | Hides the title bar |
+| `.unnumbered` | section heading | Section slide without a number |
+| `.backup` | section heading | Starts the uncounted backup slides |
+
+## Layout classes
+
+| Class | Use it on | Effect |
+|:--------|:---------------|:-------------------|
+| `.fill` | div around one image | Image fills the space below the title |
+| `.framed` | image | Thin border, for screenshots |
+| `.logo-row` | div of images | Lines up partner or funder logos |
+| `.caption`, `.small` | div or span | Grey metadata text |
+| `.source` | div | Source line pinned to the bottom |
+| `.papers` | div of images or PDFs | Tops of first pages, or `.full` pages |
+| `.people` | div around a list | Grid of people with photos or initials |

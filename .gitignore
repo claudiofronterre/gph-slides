@@ -1,0 +1,11 @@
+# Rendered example deck and its by-products
+/*.html
+/*_files/
+/*.pdf
+.quarto/
+
+# R and system files
+.Rproj.user/
+.Rhistory
+.RData
+.DS_Store

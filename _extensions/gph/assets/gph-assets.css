@@ -1,0 +1,48 @@
+/* Fonts and the contour motif. Loaded by gph.lua as an HTML dependency so
+   that the relative paths below resolve wherever the extension lives. */
+
+@font-face {
+  font-family: "Manrope";
+  src: url("Manrope-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Manrope";
+  src: url("Manrope-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Spectral";
+  src: url("Spectral-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Spectral";
+  src: url("Spectral-Italic.ttf") format("truetype");
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "Spectral";
+  src: url("Spectral-SemiBold.ttf") format("truetype");
+  font-weight: 600 700;
+  font-style: normal;
+}
+
+.reveal .gph-motif,
+.reveal .slides section.gph-section::after,
+.reveal .slides section.closing::after {
+  background-image: url("motif.svg");
+}
+
+.reveal .slides section.dark.gph-section::after,
+.reveal .slides section.dark.closing::after {
+  background-image: url("motif-dark.svg");
+}

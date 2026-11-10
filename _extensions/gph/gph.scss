@@ -1,0 +1,1816 @@
+/*-- scss:defaults --*/
+
+// GPH slides theme
+// Colours follow the University of Birmingham digital palette
+// (brand.birmingham.ac.uk/guidelines/colour). Black and white dominate,
+// gold is reserved for rules and other block graphics, and the secondary
+// colours are for data, keys and infographics, never for running text.
+
+// Primary palette
+$gph-ink: #1B1B1B !default;
+$gph-paper: #FAFAFA !default;
+$gph-gold: #C59A00 !default;
+
+// Neutrals for metadata, separators and quiet panels
+$gph-grey: #58595B !default;
+$gph-line: #D4D4D4 !default;
+$gph-panel: #F0F0EE !default;
+
+// Secondary palette, light swatches (data and block colours)
+$gph-green: #3AAA35 !default;
+$gph-turquoise: #00ACA9 !default;
+$gph-blue: #2581C4 !default;
+$gph-purple: #5E4F9C !default;
+$gph-red: #E30513 !default;
+$gph-pink: #EA5284 !default;
+$gph-orange: #F07F3C !default;
+
+// Secondary palette, deep swatches (accessible on white)
+$gph-green-deep: #007838 !default;
+$gph-turquoise-deep: #00788E !default;
+$gph-blue-deep: #0057BF !default;
+$gph-purple-deep: #501D83 !default;
+$gph-grey-deep: #3C3C3B !default;
+$gph-red-deep: #C20019 !default;
+$gph-pink-deep: #DB0661 !default;
+$gph-orange-deep: #CF4527 !default;
+
+// Typefaces. Larken is the licensed brand serif and is used when installed.
+// Spectral (SIL OFL) ships with the extension so slides look the same on
+// every machine. Manrope (SIL OFL) is the brand body face.
+$gph-serif: "Larken", "Spectral", Georgia, "Times New Roman", serif !default;
+$gph-sans: "Manrope", Arial, sans-serif !default;
+$gph-mono: "JetBrains Mono", "Fira Code", "Fira Mono", "SFMono-Regular", Menlo, Consolas, monospace !default;
+
+// Type scale in px on the 1280 x 720 canvas
+$gph-size-body: 28px !default;
+$gph-size-title: 52px !default;
+$gph-size-section: 66px !default;
+$gph-size-cover: 58px !default;
+$gph-size-h3: 30px !default;
+$gph-size-lead: 32px !default;
+$gph-size-small: 19px !default;
+$gph-size-statement: 60px !default;
+
+$gph-rule-width: 4px !default;
+
+// Dark slides ({.dark}) use the brand black. gph.lua sets the same colour as
+// the slide background, so change both together.
+$gph-dark-bg: $gph-ink !default;
+$gph-dark-text: $gph-paper !default;
+$gph-dark-muted: #ABABAB !default;
+
+// Slide padding for each layout (top right bottom left). Reveal removes
+// padding when printing, so the print rules below reuse these values.
+$gph-pad-slide: 34px 64px 60px !default;
+$gph-pad-statement: 190px 64px 60px !default;
+$gph-pad-title: 46px 64px 54px !default;
+$gph-pad-section: 210px 64px 52px 96px !default;
+$gph-pad-closing: 170px 64px 52px 96px !default;
+
+// Map onto Quarto's revealjs variables
+$font-family-sans-serif: $gph-sans;
+$font-family-monospace: $gph-mono;
+$presentation-font-size-root: $gph-size-body;
+$presentation-line-height: 1.4;
+$presentation-font-smaller: 0.75;
+$body-bg: $gph-paper;
+$body-color: $gph-ink;
+$text-muted: $gph-grey;
+$link-color: $gph-blue-deep;
+$link-color-hover: $gph-ink;
+$selection-bg: rgba(197, 154, 0, 0.3);
+$selection-color: $gph-ink;
+$border-color: $gph-line;
+
+$presentation-heading-font: $gph-serif;
+$presentation-heading-color: $gph-ink;
+$presentation-heading-font-weight: 400;
+$presentation-heading-line-height: 1.15;
+$presentation-heading-letter-spacing: normal;
+$presentation-h1-font-size: $gph-size-section;
+$presentation-h2-font-size: $gph-size-title;
+$presentation-h3-font-size: $gph-size-h3;
+$presentation-h4-font-size: $gph-size-small;
+$presentation-block-margin: 14px;
+$presentation-list-bullet-color: $gph-gold;
+$presentation-title-slide-text-align: left;
+
+$code-block-bg: $gph-panel;
+$code-block-border-color: transparent;
+$code-block-font-size: 0.7em;
+$code-inline-font-size: 0.86em;
+$code-color: $gph-ink;
+$code-bg: rgba(27, 27, 27, 0.05);
+$code-block-height: 470px;
+
+$table-border-color: $gph-line;
+
+$callout-border-width: 4px;
+$callout-color-note: $gph-blue-deep;
+$callout-color-tip: $gph-green-deep;
+$callout-color-important: $gph-red-deep;
+$callout-color-caution: $gph-orange-deep;
+$callout-color-warning: $gph-gold;
+
+$light-bg-text-color: $gph-ink;
+$light-bg-link-color: $gph-blue-deep;
+$light-bg-code-color: $gph-ink;
+$dark-bg-text-color: $gph-dark-text;
+$dark-bg-link-color: $gph-dark-text;
+$dark-bg-code-color: $gph-dark-text;
+
+/*-- scss:rules --*/
+
+:root {
+  --gph-ink: #{$gph-ink};
+  --gph-paper: #{$gph-paper};
+  --gph-gold: #{$gph-gold};
+  --gph-grey: #{$gph-grey};
+  --gph-line: #{$gph-line};
+  --gph-panel: #{$gph-panel};
+  --r-heading-font: #{$gph-serif};
+}
+
+// ---------------------------------------------------------------------------
+// Canvas and base typography
+// ---------------------------------------------------------------------------
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal .slides > section,
+.reveal .slides > section > section {
+  height: 100%;
+  box-sizing: border-box;
+  padding: $gph-pad-slide;
+}
+
+.reveal p,
+.reveal li {
+  line-height: 1.4;
+}
+
+.reveal p {
+  margin: 14px 0;
+}
+
+.reveal strong,
+.reveal b {
+  font-weight: 700;
+}
+
+.reveal a {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.reveal ul,
+.reveal ol {
+  margin-left: 1.05em;
+}
+
+.reveal li {
+  margin: 10px 0;
+  padding-left: 6px;
+}
+
+.reveal ul li::marker {
+  color: $gph-gold;
+}
+
+.reveal ol li::marker {
+  color: $gph-grey;
+  font-weight: 700;
+}
+
+.reveal li > ul,
+.reveal li > ol {
+  font-size: 0.86em;
+}
+
+// Slide titles: Spectral over the gold rule
+.reveal .slides section h2 {
+  font-size: $gph-size-title;
+  line-height: 1.14;
+  margin: 0 0 26px;
+  padding-bottom: 14px;
+  border-bottom: $gph-rule-width solid $gph-gold;
+}
+
+.reveal .slides section h3 {
+  font-family: $gph-sans;
+  font-size: $gph-size-h3;
+  font-weight: 700;
+  line-height: 1.25;
+  margin: 18px 0 10px;
+}
+
+// Quarto enlarges headings on .smaller slides, such as the references, to
+// cancel the smaller body text. That assumes sizes in em, and ours are in
+// pixels, so keep them as they are.
+.reveal.smaller .slides section h2,
+.reveal .slides section.slide.smaller h2 {
+  font-size: $gph-size-title;
+}
+
+.reveal.smaller .slides section h3,
+.reveal .slides section.slide.smaller h3 {
+  font-size: $gph-size-h3;
+}
+
+.reveal .slides section h4 {
+  font-family: $gph-sans;
+  font-size: $gph-size-small;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gph-grey;
+  margin: 18px 0 8px;
+}
+
+.reveal .slides section h2 + h3,
+.reveal .slides section h2 + .columns h3:first-child {
+  margin-top: 0;
+}
+
+// Slides without a title bar: {.no-title} keeps the heading for navigation
+// and accessibility but hides it on the slide.
+.reveal .slides section.no-title > h2 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Text helpers
+// ---------------------------------------------------------------------------
+
+.reveal .lead {
+  font-size: $gph-size-lead;
+  line-height: 1.38;
+  max-width: 1020px;
+}
+
+.reveal .small,
+.reveal .caption,
+.reveal .source {
+  font-size: $gph-size-small;
+  line-height: 1.4;
+  color: $gph-grey;
+}
+
+.reveal .source {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 50px;
+  margin: 0;
+}
+
+.reveal .muted {
+  color: $gph-grey;
+}
+
+.reveal .eyebrow {
+  font-size: $gph-size-small;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $gph-grey;
+  margin: 0 0 10px;
+}
+
+.reveal .serif {
+  font-family: $gph-serif;
+}
+
+// ---------------------------------------------------------------------------
+// Marking words
+//   [text]{.mark}       gold marker behind the lower half of the words
+//   [text]{.underline}  gold underline, for a term you are about to define
+//   [text]{.circle}     gold ring, for a single number or short word
+//   [text]{.invert}     white on black, for a label or a warning
+//   ~~text~~            struck through, for a word you are replacing
+//   *text*              serif italic, for gentle emphasis
+// Add .fragment to any of them, as in [text]{.mark .fragment}, and the mark
+// is drawn on the next click while the words stay in place. Pandoc writes
+// [text]{.mark} as a <mark> element without the class, so the rules below
+// match both. The lines are
+// backgrounds rather than borders or text decorations so that they can be
+// animated and print reliably.
+// ---------------------------------------------------------------------------
+
+.reveal .mark,
+.reveal mark {
+  --gph-mark: #{rgba($gph-gold, 0.32)};
+  color: inherit;
+  background: linear-gradient(var(--gph-mark), var(--gph-mark)) left 100% / 100% 42% no-repeat;
+  padding: 0 2px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.reveal .underline {
+  background: linear-gradient($gph-gold, $gph-gold) left 100% / 100% 0.12em no-repeat;
+  padding-bottom: 0.04em;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.reveal .circle {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  margin: 0 0.3em;
+}
+
+.reveal .circle::after {
+  content: "";
+  position: absolute;
+  inset: -0.16em -0.36em -0.1em;
+  border: 3px solid $gph-gold;
+  border-radius: 50%;
+  transform: rotate(-3deg);
+  pointer-events: none;
+}
+
+.reveal .invert {
+  color: $gph-paper;
+  background: $gph-ink;
+  padding: 0.02em 0.3em 0.06em;
+  border-radius: 3px;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+.reveal del,
+.reveal .strike {
+  color: $gph-grey;
+  text-decoration: none;
+  background: linear-gradient($gph-gold, $gph-gold) left 56% / 100% 0.1em no-repeat;
+}
+
+// Manrope has no italic, so emphasis switches to the italic of the
+// heading serif, set slightly larger to match the height of the sans.
+.reveal em {
+  font-family: $gph-serif;
+  font-style: italic;
+}
+
+.reveal .slides section :is(p, li, td, th, dd, figcaption) em {
+  font-size: 1.1em;
+  line-height: 1;
+}
+
+// Marks drawn on click. Reveal hides fragments until they are shown, so
+// these keep the words visible and animate only the mark.
+.reveal .slides section .fragment:is(mark, .mark, .underline, .circle, .invert, .strike) {
+  opacity: 1;
+  visibility: inherit;
+}
+
+.reveal .slides section .fragment:is(mark, .mark, .underline, .strike) {
+  background-size: 0% var(--gph-mark-height);
+  transition: background-size 0.6s ease, color 0.4s ease;
+}
+
+.reveal .slides section .fragment:is(mark, .mark) {
+  --gph-mark-height: 42%;
+}
+
+.reveal .slides section .fragment.underline {
+  --gph-mark-height: 0.12em;
+}
+
+.reveal .slides section .fragment.strike {
+  --gph-mark-height: 0.1em;
+  color: inherit;
+}
+
+.reveal .slides section .fragment.visible:is(mark, .mark, .underline, .strike) {
+  background-size: 100% var(--gph-mark-height);
+}
+
+.reveal .slides section .fragment.visible.strike {
+  color: $gph-grey;
+}
+
+.reveal .slides section .fragment.circle::after {
+  opacity: 0;
+  transform: rotate(-3deg) scale(1.3);
+  transition: opacity 0.35s ease, transform 0.45s ease;
+}
+
+.reveal .slides section .fragment.visible.circle::after {
+  opacity: 1;
+  transform: rotate(-3deg) scale(1);
+}
+
+.reveal .slides section .fragment.invert {
+  color: inherit;
+  background-color: transparent;
+  transition: color 0.4s ease, background-color 0.4s ease;
+}
+
+.reveal .slides section .fragment.visible.invert {
+  color: $gph-paper;
+  background-color: $gph-ink;
+}
+
+// Colour keys for figures: [Forest]{.key .turquoise}
+.reveal .key {
+  white-space: nowrap;
+}
+
+.reveal .key::before {
+  content: "";
+  display: inline-block;
+  width: 0.62em;
+  height: 0.62em;
+  margin-right: 0.35em;
+  vertical-align: 0.02em;
+  border-radius: 2px;
+  background: var(--gph-key, #{$gph-grey});
+}
+
+.reveal .key.line::before {
+  height: 0.16em;
+  width: 1.1em;
+  vertical-align: 0.24em;
+  border-radius: 0;
+}
+
+.reveal .key.dot::before {
+  border-radius: 50%;
+}
+
+$gph-key-colours: (
+  "green": $gph-green,
+  "turquoise": $gph-turquoise,
+  "blue": $gph-blue,
+  "purple": $gph-purple,
+  "red": $gph-red,
+  "pink": $gph-pink,
+  "orange": $gph-orange,
+  "grey": $gph-grey,
+  "gold": $gph-gold,
+  "ink": $gph-ink
+);
+
+@each $name, $value in $gph-key-colours {
+  .reveal .#{$name} {
+    --gph-key: #{$value};
+  }
+}
+
+// Tinted markers tie words to a series in a figure: [Forest]{.mark .turquoise}.
+// The brand allows black text on tints of up to 50%.
+@each $name, $value in $gph-key-colours {
+  @if $name != "ink" and $name != "gold" {
+    .reveal :is(mark, .mark).#{$name} {
+      --gph-mark: #{rgba($value, 0.4)};
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Message blocks
+// ---------------------------------------------------------------------------
+
+.reveal .takeaway {
+  border-left: $gph-rule-width solid $gph-gold;
+  padding: 4px 0 4px 22px;
+  margin: 26px 0 0;
+  font-size: 30px;
+  line-height: 1.38;
+}
+
+.reveal .takeaway p {
+  margin: 0;
+}
+
+.reveal .takeaway.bottom {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 60px;
+}
+
+.reveal section:has(.source) .takeaway.bottom {
+  bottom: 104px;
+}
+
+.reveal blockquote {
+  width: auto;
+  margin: 26px 0;
+  padding: 2px 0 2px 26px;
+  box-shadow: none;
+  background: none;
+  border-left: 1px solid $gph-line;
+  color: $gph-ink;
+  font-family: $gph-serif;
+  font-style: italic;
+  font-size: 34px;
+  line-height: 1.35;
+}
+
+.reveal blockquote p {
+  margin: 0 0 12px;
+}
+
+.reveal blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+.reveal blockquote .attribution,
+.reveal blockquote cite {
+  display: block;
+  font-family: $gph-sans;
+  font-style: normal;
+  font-size: $gph-size-small;
+  color: $gph-grey;
+  margin-top: 16px;
+}
+
+// Big statement slide: ## Title {.statement}
+// Reveal shows and hides slides through their inline display style, so the
+// special slides are laid out with padding and absolute positions rather
+// than by changing display.
+.reveal .slides section.statement {
+  padding: $gph-pad-statement;
+}
+
+.reveal .slides section.statement > h2 {
+  border: 0;
+  padding: 0;
+  font-size: $gph-size-statement;
+  line-height: 1.18;
+  max-width: 1020px;
+}
+
+.reveal .slides section.statement > h2::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: $gph-rule-width + 2px;
+  margin-top: 30px;
+  background: $gph-gold;
+}
+
+.reveal .slides section.statement p {
+  font-size: $gph-size-lead;
+  max-width: 980px;
+}
+
+// ---------------------------------------------------------------------------
+// Layout helpers
+// ---------------------------------------------------------------------------
+
+.reveal .columns {
+  display: flex;
+  gap: 48px;
+}
+
+.reveal .columns > .column {
+  min-width: 0;
+}
+
+.reveal .columns > .column > :not(ul, ol),
+.reveal .columns > .column:first-child > :not(ul, ol),
+.reveal .columns > .column:last-child > :not(ul, ol) {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.reveal .columns.v-center {
+  align-items: center;
+}
+
+.reveal .columns.divided > .column + .column {
+  border-left: 1px solid $gph-line;
+  padding-left: 48px;
+}
+
+// Grids of short items: cards, stats and steps
+.reveal .cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 30px 48px;
+  margin: 24px 0;
+}
+
+.reveal .cards > div {
+  border-top: 1px solid $gph-line;
+  padding-top: 18px;
+}
+
+.reveal .cards > div > :first-child {
+  margin-top: 0;
+}
+
+.reveal .cards p {
+  font-size: 26px;
+  margin: 8px 0;
+}
+
+.reveal .cards img {
+  height: 72px;
+  width: auto;
+  margin: 0 0 12px;
+}
+
+// Highlight one card with a gold top rule: ::: {.card .accent}
+.reveal .cards > div.accent {
+  border-top: $gph-rule-width solid $gph-gold;
+  padding-top: 15px;
+}
+
+.reveal .stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 30px 48px;
+  margin: 30px 0;
+}
+
+.reveal .stats > p {
+  margin: 0;
+  font-size: 24px;
+  line-height: 1.35;
+  color: $gph-ink;
+  border-top: 1px solid $gph-line;
+  padding-top: 16px;
+}
+
+.reveal .stats > p > strong:first-child {
+  display: block;
+  font-family: $gph-serif;
+  font-weight: 400;
+  font-size: 64px;
+  line-height: 1.05;
+  margin-bottom: 8px;
+  font-variant-numeric: lining-nums;
+}
+
+.reveal .stats.large > p > strong:first-child {
+  font-size: 96px;
+}
+
+// Numbered steps from an ordered list: ::: {.steps}
+.reveal .steps > ol {
+  list-style: none;
+  counter-reset: gph-step;
+  margin: 18px 0 0;
+  padding: 0;
+}
+
+// The separator is a background line because Chrome drops the text of
+// these list items from printed PDFs when they carry a bottom border.
+.reveal .steps > ol > li {
+  counter-increment: gph-step;
+  position: relative;
+  margin: 0;
+  padding: 12px 0 12px 84px;
+  min-height: 54px;
+  background: linear-gradient($gph-line, $gph-line) left bottom / 100% 1px no-repeat;
+}
+
+.reveal .steps > ol > li:last-child {
+  background: none;
+}
+
+.reveal .steps > ol > li::before {
+  content: counter(gph-step);
+  position: absolute;
+  left: 0;
+  top: 6px;
+  font-family: $gph-serif;
+  font-size: 46px;
+  line-height: 1;
+  color: $gph-ink;
+  width: 56px;
+  border-bottom: $gph-rule-width solid $gph-gold;
+  padding-bottom: 6px;
+  text-align: left;
+}
+
+.reveal .steps > ol > li > p {
+  margin: 0;
+  font-size: 25px;
+}
+
+.reveal .steps > ol > li strong:first-child {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 4px;
+}
+
+.reveal .steps.horizontal > ol {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  gap: 40px;
+}
+
+.reveal .steps.horizontal > ol > li {
+  padding: 78px 0 0;
+  border-bottom: 0;
+}
+
+.reveal .steps.horizontal > ol > li::before {
+  top: 0;
+}
+
+// Equations with a plain-language reading of each term
+.reveal .equation {
+  font-size: 1.15em;
+  margin: 26px 0;
+}
+
+.reveal .terms {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 12px 30px;
+  align-items: baseline;
+  margin: 18px 0;
+  padding-top: 18px;
+  border-top: 1px solid $gph-line;
+}
+
+.reveal .terms > p {
+  margin: 0;
+  font-size: 25px;
+}
+
+.reveal .terms > p:nth-child(odd) {
+  font-size: 28px;
+  text-align: right;
+}
+
+// Figures
+.reveal .slides section img {
+  max-width: 100%;
+}
+
+.reveal .slides section figure {
+  margin: 0;
+}
+
+.reveal .slides section figcaption,
+.reveal .slides section .figure-caption,
+.reveal .slides section p.caption {
+  font-size: $gph-size-small;
+  color: $gph-grey;
+  text-align: left;
+  margin-top: 6px;
+}
+
+.reveal .slides section .quarto-figure-center > figure > p,
+.reveal .slides section .quarto-figure-center > figure > div {
+  text-align: center;
+}
+
+.reveal .columns img {
+  max-height: 470px;
+  width: auto;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.reveal .framed img,
+.reveal img.framed {
+  border: 1px solid $gph-line;
+}
+
+// Fill the space below the title with one figure: ::: {.fill}
+.reveal .fill {
+  height: 540px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.reveal .fill img {
+  max-height: 100%;
+  width: auto;
+  display: block;
+  margin: 0 auto;
+  object-fit: contain;
+}
+
+// Logos in a row, for partners and funders
+.reveal .logo-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 28px 56px;
+  margin: 24px 0;
+}
+
+.reveal .logo-row p {
+  margin: 0;
+}
+
+.reveal .logo-row img {
+  height: 70px;
+  width: auto;
+  margin: 0;
+}
+
+// ---------------------------------------------------------------------------
+// Tables, code and callouts
+// ---------------------------------------------------------------------------
+
+.reveal table {
+  border-collapse: collapse;
+  font-size: 24px;
+  margin: 18px 0;
+  width: 100%;
+  border-top: 2px solid $gph-ink;
+  border-bottom: 2px solid $gph-ink;
+}
+
+.reveal table th {
+  font-weight: 700;
+  border-bottom: 1px solid $gph-ink !important;
+}
+
+.reveal table th,
+.reveal table td {
+  padding: 10px 14px;
+  border-bottom: 1px solid $gph-line;
+  line-height: 1.3;
+}
+
+.reveal table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.reveal table caption {
+  font-size: $gph-size-small;
+  color: $gph-grey;
+  text-align: left;
+  caption-side: top;
+  padding-bottom: 8px;
+}
+
+.reveal div.sourceCode {
+  border: 0;
+  border-radius: 4px;
+  margin: 16px 0;
+}
+
+.reveal pre {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.reveal div.sourceCode pre,
+.reveal pre.sourceCode {
+  padding: 14px 18px;
+  box-shadow: none;
+}
+
+.reveal pre code {
+  font-size: 20px;
+  line-height: 1.45;
+  max-height: $code-block-height;
+}
+
+.reveal .cell-output pre code,
+.reveal .cell-output-stdout pre code {
+  font-size: 19px;
+  color: $gph-grey;
+  background: transparent;
+}
+
+.reveal .cell-output pre,
+.reveal .cell-output-stdout pre {
+  border-left: 1px solid $gph-line;
+  padding-left: 18px;
+  margin: 8px 0 16px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.reveal code {
+  font-family: $gph-mono;
+}
+
+.reveal p code,
+.reveal li code,
+.reveal td code {
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(27, 27, 27, 0.06);
+  white-space: nowrap;
+}
+
+.reveal .callout {
+  margin: 22px 0;
+  border-left-width: $gph-rule-width !important;
+  border-radius: 0 !important;
+  background: $gph-panel;
+  box-shadow: none !important;
+}
+
+.reveal .callout .callout-header {
+  background: transparent !important;
+  border-bottom: 0 !important;
+  padding: 12px 22px 0 !important;
+}
+
+.reveal .callout .callout-title-container {
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.reveal .callout .callout-body-container,
+.reveal .callout .callout-body {
+  font-size: 24px;
+  padding: 2px 22px 14px !important;
+}
+
+.reveal .callout .callout-icon::before {
+  transform: scale(0.85);
+}
+
+// Tabsets
+.reveal .panel-tabset [role="tab"] {
+  font-size: 22px;
+  padding: 8px 18px;
+}
+
+.reveal .panel-tabset [role="tab"][aria-selected="true"] {
+  border-bottom: 3px solid $gph-gold;
+}
+
+// References from a .bib file
+.reveal .references,
+.reveal #refs {
+  font-size: 21px;
+  line-height: 1.4;
+}
+
+.reveal .references > div,
+.reveal #refs > div {
+  margin: 0 0 14px;
+  padding-left: 1.5em;
+  text-indent: -1.5em;
+}
+
+.reveal .aside-footnotes,
+.reveal aside {
+  font-size: 18px;
+  color: $gph-grey;
+}
+
+// ---------------------------------------------------------------------------
+// Title slide (see title-slide.html)
+// ---------------------------------------------------------------------------
+
+.reveal .slides section.gph-title-slide {
+  padding: $gph-pad-title;
+  text-align: left;
+}
+
+.reveal .gph-title-slide .gph-motif {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 62%;
+  z-index: 0;
+  background-size: cover;
+  background-position: left center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.35) 32%, #000 70%);
+  mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.35) 32%, #000 70%);
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.reveal .gph-title-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+}
+
+.reveal .gph-wordmark {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  color: $gph-ink;
+}
+
+.reveal .gph-wordmark-short {
+  font-family: $gph-serif;
+  font-weight: 600;
+  font-size: 34px;
+  line-height: 1;
+  letter-spacing: 0.02em;
+  padding-right: 16px;
+  border-right: 2px solid $gph-gold;
+}
+
+.reveal .gph-wordmark-long {
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.reveal .gph-title-logos {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  background: $gph-paper;
+  padding-left: 18px;
+}
+
+.reveal .gph-title-logos img {
+  height: 64px;
+  width: auto;
+  margin: 0;
+}
+
+// The title block grows upwards from a fixed baseline, so long titles and
+// several authors never collide.
+.reveal .gph-title-main {
+  position: absolute;
+  z-index: 1;
+  left: 64px;
+  bottom: 248px;
+  max-width: 860px;
+}
+
+.reveal .gph-title-slide h1.title {
+  font-family: $gph-serif;
+  font-size: $gph-size-cover;
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.reveal .gph-title-slide .subtitle {
+  font-family: $gph-serif;
+  font-style: italic;
+  font-size: 32px;
+  line-height: 1.3;
+  color: $gph-ink;
+  margin: 18px 0 0;
+}
+
+.reveal .gph-title-meta {
+  position: absolute;
+  z-index: 1;
+  left: 64px;
+  top: 498px;
+  width: 860px;
+  display: flex;
+  align-items: flex-start;
+  gap: 56px;
+  padding-top: 26px;
+  border-top: $gph-rule-width solid $gph-gold;
+}
+
+.reveal .gph-title-authors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 44px;
+  flex: 1 1 auto;
+}
+
+.reveal .gph-title-author {
+  max-width: 440px;
+}
+
+.reveal .gph-title-event {
+  flex: 0 0 auto;
+  max-width: 300px;
+}
+
+.reveal .gph-author-name {
+  white-space: nowrap;
+}
+
+.reveal .gph-title-author p {
+  margin: 0;
+}
+
+.reveal .gph-author-name {
+  font-size: 25px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.reveal .gph-author-detail {
+  font-size: 18px;
+  line-height: 1.45;
+  color: $gph-grey;
+  margin-top: 6px !important;
+}
+
+.reveal .gph-author-email a {
+  color: $gph-grey;
+}
+
+.reveal .gph-title-event {
+  border-left: 1px solid $gph-line;
+  padding-left: 28px;
+}
+
+.reveal .gph-title-event p {
+  margin: 0;
+}
+
+.reveal .gph-event-name {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.reveal .gph-event-date {
+  font-size: 18px;
+  color: $gph-grey;
+  margin-top: 6px !important;
+}
+
+// ---------------------------------------------------------------------------
+// Section slides (level-1 headings, numbered by gph.lua)
+// ---------------------------------------------------------------------------
+
+.reveal .slides section.gph-section {
+  padding: $gph-pad-section;
+}
+
+.reveal .slides section.gph-section::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 46%;
+  background-size: cover;
+  background-position: right center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 55%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 55%);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.reveal .slides section.gph-section > h1 {
+  position: relative;
+  z-index: 1;
+  font-size: $gph-size-section;
+  line-height: 1.1;
+  max-width: 760px;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.reveal .slides section.gph-section[data-gph-number]::before {
+  content: attr(data-gph-number);
+  display: block;
+  width: 88px;
+  font-family: $gph-serif;
+  font-size: 40px;
+  line-height: 1;
+  color: $gph-grey;
+  padding-bottom: 16px;
+  margin-bottom: 30px;
+  border-bottom: ($gph-rule-width + 2px) solid $gph-gold;
+}
+
+.reveal .slides section.gph-section:not([data-gph-number])::before {
+  content: "";
+  display: block;
+  width: 88px;
+  margin-bottom: 30px;
+  border-bottom: ($gph-rule-width + 2px) solid $gph-gold;
+}
+
+.reveal .slides section.gph-section > :not(h1) {
+  position: relative;
+  z-index: 1;
+  max-width: 700px;
+  color: $gph-grey;
+}
+
+// ---------------------------------------------------------------------------
+// Closing slide: ## Thank you {.closing}
+// ---------------------------------------------------------------------------
+
+.reveal .slides section.closing {
+  padding: $gph-pad-closing;
+}
+
+.reveal .slides section.closing::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 52%;
+  background-size: cover;
+  background-position: right center;
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 55%);
+  mask-image: linear-gradient(to right, transparent 0%, #000 55%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.reveal .slides section.closing > * {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+}
+
+.reveal .slides section.closing > h2 {
+  border: 0;
+  padding: 0;
+  font-size: 80px;
+  line-height: 1.05;
+  margin-bottom: 0;
+}
+
+.reveal .slides section.closing > h2::after {
+  content: "";
+  display: block;
+  width: 96px;
+  height: $gph-rule-width + 2px;
+  margin: 34px 0 30px;
+  background: $gph-gold;
+}
+
+.reveal .slides section.closing p {
+  font-size: 26px;
+  margin: 8px 0;
+}
+
+// ---------------------------------------------------------------------------
+// Outline: ## Outline {.outline}
+// gph.lua fills the slide with the numbered sections and their descriptions.
+// A repeated outline highlights the section that comes next.
+// ---------------------------------------------------------------------------
+
+.reveal .gph-outline {
+  margin-top: 22px;
+}
+
+.reveal .gph-outline-item {
+  display: grid;
+  grid-template-columns: 92px 1fr;
+  align-items: baseline;
+  padding: 14px 0 16px;
+  background: linear-gradient($gph-line, $gph-line) left bottom / 100% 1px no-repeat;
+}
+
+.reveal .gph-outline-item:last-child {
+  background: none;
+}
+
+.reveal .gph-outline-item:not(:has(.gph-outline-number)) {
+  grid-template-columns: 1fr;
+}
+
+.reveal .gph-outline-number {
+  grid-row: 1 / span 2;
+  align-self: start;
+  width: 52px;
+  padding: 4px 0 10px;
+  font-family: $gph-serif;
+  font-size: 34px;
+  line-height: 1;
+  color: $gph-grey;
+}
+
+.reveal .gph-outline-title {
+  font-family: $gph-serif;
+  font-size: 36px;
+  line-height: 1.15;
+  color: $gph-ink;
+}
+
+.reveal .gph-outline-text {
+  grid-column: -2;
+  margin-top: 4px;
+  font-size: 20px;
+  line-height: 1.35;
+  color: $gph-grey;
+}
+
+.reveal .gph-outline-item.current .gph-outline-number {
+  color: $gph-ink;
+  background: linear-gradient($gph-gold, $gph-gold) left bottom / 100% $gph-rule-width no-repeat;
+}
+
+.reveal .gph-outline-item.muted :is(.gph-outline-number, .gph-outline-title, .gph-outline-text) {
+  color: #A9A9A9;
+}
+
+// ---------------------------------------------------------------------------
+// Section label: `section-label: true` in the YAML header puts the name of
+// the current section in the top right corner of each content slide.
+// ---------------------------------------------------------------------------
+
+.reveal .slides section[data-gph-label]::before {
+  content: attr(data-gph-label);
+  position: absolute;
+  top: 12px;
+  right: 64px;
+  font-family: $gph-sans;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: pre;
+  color: $gph-grey;
+}
+
+// ---------------------------------------------------------------------------
+// Photo slides: ## Title {.photo background-image="photo.jpg"}
+// The picture fills the slide and the title sits over a dark gradient at
+// the bottom. A paragraph after the title becomes a credit line.
+// ---------------------------------------------------------------------------
+
+// Reveal copies the slide's classes to its background layer, which fills
+// the window on screen and the whole page in print, so the gradient goes
+// there rather than on the slide.
+.reveal .slide-background.photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.74) 0%, rgba(0, 0, 0, 0.42) 32%, rgba(0, 0, 0, 0) 60%);
+  pointer-events: none;
+}
+
+.reveal .slides section.photo > h2 {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 58px;
+  z-index: 1;
+  max-width: 1000px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: $gph-size-statement;
+  line-height: 1.12;
+  color: $gph-paper;
+}
+
+.reveal .slides section.photo > h2::before {
+  content: "";
+  display: block;
+  width: 96px;
+  height: $gph-rule-width + 2px;
+  margin-bottom: 24px;
+  background: $gph-gold;
+}
+
+.reveal .slides section.photo:has(> p) > h2 {
+  bottom: 104px;
+}
+
+.reveal .slides section.photo > p {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 50px;
+  z-index: 1;
+  margin: 0;
+  font-size: 20px;
+  color: rgba(250, 250, 250, 0.82);
+}
+
+// ---------------------------------------------------------------------------
+// People: ::: {.people} around a list of "![](photo.jpg) **Name** Role"
+// Without a photo, gph.lua shows the initials of the name.
+// ---------------------------------------------------------------------------
+
+.reveal .people > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 34px 28px;
+  margin: 34px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.reveal .people > ul > li {
+  margin: 0;
+  text-align: center;
+}
+
+.reveal .gph-person-photo {
+  display: block;
+  width: 150px;
+  height: 150px;
+  margin: 0 auto 18px;
+  overflow: hidden;
+  border-radius: 50%;
+  background: $gph-panel;
+  outline: 2px solid $gph-gold;
+  outline-offset: 5px;
+}
+
+.reveal .gph-person-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  object-fit: cover;
+}
+
+.reveal .gph-person-initials {
+  font-family: $gph-serif;
+  font-size: 54px;
+  line-height: 150px;
+  color: $gph-ink;
+}
+
+.reveal .gph-person-name {
+  display: block;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.reveal .gph-person-role {
+  display: block;
+  margin-top: 4px;
+  font-size: 18px;
+  line-height: 1.35;
+  color: $gph-grey;
+}
+
+// ---------------------------------------------------------------------------
+// Papers: ::: {.papers} around images (or PDFs) of first pages
+// The top half of each page is shown, fading out at the bottom. Add .third
+// for less, .full for the whole page, or .stack to fan the pages out.
+// ---------------------------------------------------------------------------
+
+.reveal .papers {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 44px;
+  margin-top: 24px;
+}
+
+.reveal .gph-paper {
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 400px;
+}
+
+.reveal .gph-paper:only-child {
+  max-width: 600px;
+}
+
+.reveal .gph-paper-page {
+  filter: drop-shadow(0 4px 14px rgba(27, 27, 27, 0.16));
+}
+
+.reveal .gph-paper-page img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  aspect-ratio: 1.414;
+  object-fit: cover;
+  object-position: top;
+  background: #FFFFFF;
+  -webkit-mask-image: linear-gradient(to bottom, #000 70%, transparent);
+  mask-image: linear-gradient(to bottom, #000 70%, transparent);
+}
+
+.reveal .papers.third .gph-paper-page img {
+  aspect-ratio: 2.12;
+}
+
+.reveal .papers.full .gph-paper-page img {
+  aspect-ratio: auto;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.reveal .papers.full .gph-paper {
+  max-width: 300px;
+}
+
+.reveal .gph-paper-caption {
+  margin-top: 12px;
+  font-size: 18px;
+  line-height: 1.35;
+  color: $gph-grey;
+}
+
+.reveal .papers.stack {
+  gap: 0;
+  margin-top: 34px;
+}
+
+.reveal .papers.stack > .gph-paper + .gph-paper {
+  margin-left: -24%;
+}
+
+.reveal .papers.stack > .gph-paper:nth-child(odd) {
+  transform: rotate(-2.5deg);
+}
+
+.reveal .papers.stack > .gph-paper:nth-child(even) {
+  transform: translateY(20px) rotate(2deg);
+}
+
+.reveal .papers.stack .gph-paper-caption {
+  display: none;
+}
+
+// ---------------------------------------------------------------------------
+// QR codes: {{< qr https://example.org >}}
+// On a closing slide the code sits on the right, over the motif.
+// ---------------------------------------------------------------------------
+
+.reveal .gph-qr {
+  display: inline-block;
+  width: 180px;
+  line-height: 0;
+  vertical-align: middle;
+}
+
+.reveal div.gph-qr {
+  display: block;
+  margin: 18px 0;
+}
+
+.reveal .gph-qr svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.reveal .slides section.closing .gph-qr {
+  position: absolute;
+  right: 120px;
+  bottom: 110px;
+  width: 190px;
+  margin: 0;
+  padding: 10px;
+  background: $gph-paper;
+  box-shadow: 0 4px 18px rgba(27, 27, 27, 0.14);
+}
+
+// ---------------------------------------------------------------------------
+// Dark slides: # Section {.dark}, ## Statement {.statement .dark} and
+// ## Thank you {.closing .dark}
+// gph.lua sets the slide background to the brand black. Only black, white
+// and gold appear on these slides, because the brand keeps the secondary
+// colours off black backgrounds.
+// ---------------------------------------------------------------------------
+
+.reveal .slides section.dark,
+.reveal .slides section.dark :is(h1, h2, h3, h4, strong, b, blockquote, .lead) {
+  color: $gph-dark-text;
+}
+
+.reveal .slides section.dark :is(.muted, .caption, .small, .source, .eyebrow),
+.reveal .slides section.dark.gph-section > :not(h1),
+.reveal .slides section.dark.gph-section[data-gph-number]::before {
+  color: $gph-dark-muted;
+}
+
+.reveal .slides section.dark a {
+  color: $gph-dark-text;
+  text-decoration: underline;
+  text-decoration-color: $gph-gold;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+
+.reveal .slides section.dark :is(.mark, mark) {
+  --gph-mark: #{rgba($gph-gold, 0.6)};
+}
+
+.reveal .slides section.dark .invert,
+.reveal .slides section.dark .fragment.visible.invert {
+  color: $gph-ink;
+  background-color: $gph-paper;
+}
+
+.reveal .slides section.dark :is(del, .strike),
+.reveal .slides section.dark .fragment.visible.strike {
+  color: $gph-dark-muted;
+}
+
+.reveal .slides section.dark :is(.takeaway, blockquote) {
+  color: $gph-dark-text;
+}
+
+.reveal .slides section.dark :is(.gph-outline-title, .gph-person-initials) {
+  color: $gph-dark-text;
+}
+
+.reveal .slides section.dark :is(.gph-outline-number, .gph-outline-text, .gph-person-role),
+.reveal .slides section.dark[data-gph-label]::before {
+  color: $gph-dark-muted;
+}
+
+.reveal .slides section.dark .gph-outline-item.current .gph-outline-number {
+  color: $gph-dark-text;
+}
+
+.reveal .slides section.dark .gph-outline-item.muted :is(.gph-outline-number, .gph-outline-title, .gph-outline-text) {
+  color: #6B6B6B;
+}
+
+.reveal .slides section.dark .gph-outline-item {
+  background-image: linear-gradient(#3A3A3A, #3A3A3A);
+}
+
+.reveal .slides section.dark .gph-outline-item:last-child {
+  background: none;
+}
+
+// ---------------------------------------------------------------------------
+// Slide furniture: logo, footer, slide number, progress, controls
+// These sit outside the scaled slide, so sizes are in screen pixels.
+// ---------------------------------------------------------------------------
+
+.reveal .slide-logo {
+  display: block;
+  left: 22px;
+  right: auto !important;
+  bottom: 12px;
+  max-height: 30px !important;
+  max-width: 180px !important;
+}
+
+// Quarto's own footer rules load after the theme, hence the !important
+.reveal .footer {
+  left: 210px !important;
+  right: 120px !important;
+  bottom: 16px !important;
+  width: auto !important;
+  margin: 0 !important;
+  text-align: left !important;
+  font-size: 13px !important;
+  color: $gph-grey;
+  letter-spacing: 0.02em;
+}
+
+.reveal .footer p {
+  margin: 0;
+}
+
+.reveal .slide-number {
+  font-family: $gph-sans;
+  font-size: 14px !important;
+  color: $gph-grey !important;
+  background: transparent !important;
+  right: 22px !important;
+  bottom: 14px !important;
+  top: auto !important;
+}
+
+.reveal .slide-number a {
+  color: $gph-grey;
+  text-decoration: none;
+}
+
+.reveal.has-dark-background .slide-number,
+.reveal.has-dark-background .slide-number a {
+  color: $gph-dark-muted !important;
+}
+
+.reveal .progress {
+  height: 3px;
+  color: $gph-gold;
+}
+
+.reveal .controls {
+  color: #9A9A9A;
+  bottom: 40px;
+  right: 18px;
+}
+
+.reveal .controls .controls-arrow::before,
+.reveal .controls .controls-arrow::after {
+  width: 12px;
+}
+
+// No furniture on the title, section and closing slides
+html:not(.print-pdf) .reveal:has(.slides > section.gph-title-slide.present) :is(.slide-logo, .footer, .slide-number),
+html:not(.print-pdf) .reveal:has(.slides section.gph-section.present) :is(.slide-logo, .footer, .slide-number),
+html:not(.print-pdf) .reveal:has(.slides section.closing.present) :is(.slide-logo, .footer),
+html:not(.print-pdf) .reveal.has-dark-background :is(.slide-logo, .footer) {
+  display: none !important;
+}
+
+// ---------------------------------------------------------------------------
+// Printing to PDF (open the deck with ?print-pdf in Chrome)
+// Reveal's print styles remove slide padding and height. Both are set again
+// here, on the slides themselves rather than on .pdf-page, because reveal
+// measures each slide before it wraps it in a page.
+// ---------------------------------------------------------------------------
+
+html.reveal-print body .reveal .slides section:not(.stack) {
+  padding: $gph-pad-slide !important;
+}
+
+html.reveal-print body .reveal .slides section.statement:not(.stack) {
+  padding: $gph-pad-statement !important;
+}
+
+html.reveal-print body .reveal .slides section.gph-title-slide:not(.stack) {
+  padding: $gph-pad-title !important;
+}
+
+html.reveal-print body .reveal .slides section.gph-section:not(.stack) {
+  padding: $gph-pad-section !important;
+}
+
+html.reveal-print body .reveal .slides section.closing:not(.stack) {
+  padding: $gph-pad-closing !important;
+}
+
+html.reveal-print body .reveal .slides section:not(.stack):is(.gph-title-slide, .gph-section, .statement, .closing, .photo, :has(.source, .takeaway.bottom)) {
+  height: 720px !important;
+}
+
+html.print-pdf .reveal .slide-number-pdf {
+  font-family: $gph-sans;
+  font-size: 14px !important;
+  color: $gph-grey !important;
+  background: transparent !important;
+  left: auto !important;
+  right: 22px !important;
+  bottom: 14px !important;
+  top: auto !important;
+}
+
+html.print-pdf .reveal .pdf-page:has(> section:is(.gph-title-slide, .gph-section)) .slide-number-pdf {
+  display: none !important;
+}
+
+html.print-pdf .reveal .pdf-page:has(> section:is(.dark, .photo)) .slide-number-pdf {
+  color: $gph-dark-muted !important;
+}
+
+// gph.js copies the logo and footer onto each content page
+html.gph-pdf-ready .reveal > .slide-logo,
+html.gph-pdf-ready .reveal > .footer {
+  display: none !important;
+}
+
+html.print-pdf .reveal .pdf-page > .gph-pdf-logo {
+  position: absolute;
+  left: 26px;
+  bottom: 14px;
+  height: 30px;
+  width: auto;
+  max-width: 180px;
+  margin: 0;
+}
+
+html.print-pdf .reveal .pdf-page > .gph-pdf-footer {
+  position: absolute;
+  left: 220px;
+  bottom: 19px;
+  font-family: $gph-sans;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: $gph-grey;
+}
+
+html.print-pdf .reveal .pdf-page > .gph-pdf-footer p {
+  margin: 0;
+}
+
+@media print {
+  .reveal {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .reveal .slides section {
+    overflow: hidden !important;
+  }
+}
