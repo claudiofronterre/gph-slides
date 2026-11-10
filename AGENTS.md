@@ -16,4 +16,6 @@ Printed pages are larger than the slides (1331 by 748 pixels for 1280 by 720) be
 
 `qr.lua` is a QR encoder written for the extension. It was checked module by module against the `qrcode` LaTeX package for versions 1 to 15 at the same mask. The mask chosen by the penalty rules can differ from LaTeX's, and both are valid. `tools/examples.R` makes the mock papers and the map used by the example deck, so the repository holds no third-party images.
 
+The rendered example deck is published on GitHub Pages from the `gh-pages` branch. After changing the template, commit to `main` and run `quarto publish gh-pages template.qmd` to update it.
+
 Do not set `display` on slide sections. Reveal hides slides through their inline display style, and a forced display keeps hidden slides visible.

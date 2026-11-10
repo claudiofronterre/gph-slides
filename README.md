@@ -4,6 +4,8 @@ A Quarto revealjs template for talks by the Geostatistics for Population Health 
 
 ![Six slides from the example deck](.github/preview.png)
 
+The example deck is online at [claudiofronterre.github.io/gph-slides](https://claudiofronterre.github.io/gph-slides/). Its source, `template.qmd`, is the file every new talk starts from.
+
 The title, section and closing slides carry a contour motif. It is a single realisation of a Gaussian process with Matérn correlation, drawn as isolines with a few sampling locations, made by `tools/motif.R`.
 
 ## Start a new talk
